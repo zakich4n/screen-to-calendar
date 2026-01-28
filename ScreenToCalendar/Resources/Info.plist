@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>CFBundleDevelopmentRegion</key>
+    <string>en</string>
+    <key>CFBundleExecutable</key>
+    <string>ScreenToCalendar</string>
+    <key>CFBundleIdentifier</key>
+    <string>com.screentocalendar.app</string>
+    <key>CFBundleInfoDictionaryVersion</key>
+    <string>6.0</string>
+    <key>CFBundleName</key>
+    <string>Screen to Calendar</string>
+    <key>CFBundlePackageType</key>
+    <string>APPL</string>
+    <key>CFBundleShortVersionString</key>
+    <string>1.0</string>
+    <key>CFBundleVersion</key>
+    <string>1</string>
+    <key>LSMinimumSystemVersion</key>
+    <string>14.0</string>
+    <key>LSUIElement</key>
+    <true/>
+    <key>NSHumanReadableCopyright</key>
+    <string>Copyright 2024. All rights reserved.</string>
+    <key>NSScreenCaptureUsageDescription</key>
+    <string>Screen to Calendar needs screen capture access to extract text from screenshots and create calendar events.</string>
+    <key>NSCalendarsFullAccessUsageDescription</key>
+    <string>Screen to Calendar needs calendar access to create events from captured text.</string>
+    <key>NSCalendarsUsageDescription</key>
+    <string>Screen to Calendar needs calendar access to create events from captured text.</string>
+</dict>
+</plist>
