@@ -1,13 +1,43 @@
 import SwiftUI
 import KeyboardShortcuts
 
+enum MenuBarViewState {
+    case menu
+    case eventForm
+}
+
 struct MenuBarView: View {
     @EnvironmentObject var appState: AppState
     @EnvironmentObject var settings: AppSettings
     @Environment(\.openWindow) private var openWindow
     @Environment(\.openSettings) private var openSettings
 
+    @State private var viewState: MenuBarViewState = .menu
+
     var body: some View {
+        Group {
+            switch viewState {
+            case .menu:
+                menuContent
+            case .eventForm:
+                eventFormContent
+            }
+        }
+        .onChange(of: appState.showEventForm) { _, show in
+            if show {
+                viewState = .eventForm
+            }
+        }
+        .onChange(of: appState.currentParsedEvent) { _, event in
+            if event == nil {
+                viewState = .menu
+            }
+        }
+    }
+
+    // MARK: - Menu Content
+
+    private var menuContent: some View {
         VStack(alignment: .leading, spacing: 12) {
             // Header
             HStack {
@@ -114,9 +144,22 @@ struct MenuBarView: View {
         }
         .padding()
         .frame(width: 280)
-        .onChange(of: appState.showEventForm) { _, show in
-            if show {
-                openWindow(id: "event-form")
+    }
+
+    // MARK: - Event Form Content
+
+    private var eventFormContent: some View {
+        Group {
+            if let event = appState.currentParsedEvent {
+                EventFormView(
+                    event: event,
+                    onCancel: {
+                        appState.clearCurrentEvent()
+                    },
+                    onSave: {
+                        appState.clearCurrentEvent()
+                    }
+                )
             }
         }
     }

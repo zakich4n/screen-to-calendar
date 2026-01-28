@@ -20,9 +20,13 @@ struct EventFormView: View {
     @State private var showSourceText = false
 
     private let originalEvent: ParsedEvent
+    private let onCancel: (() -> Void)?
+    private let onSave: (() -> Void)?
 
-    init(event: ParsedEvent) {
+    init(event: ParsedEvent, onCancel: (() -> Void)? = nil, onSave: (() -> Void)? = nil) {
         self.originalEvent = event
+        self.onCancel = onCancel
+        self.onSave = onSave
         _title = State(initialValue: event.title)
         _startDate = State(initialValue: event.startDate)
         _endDate = State(initialValue: event.effectiveEndDate)
@@ -174,8 +178,12 @@ struct EventFormView: View {
             // Footer buttons
             HStack {
                 Button("Cancel") {
-                    appState.clearCurrentEvent()
-                    dismiss()
+                    if let onCancel = onCancel {
+                        onCancel()
+                    } else {
+                        appState.clearCurrentEvent()
+                        dismiss()
+                    }
                 }
                 .keyboardShortcut(.escape)
 
@@ -191,7 +199,7 @@ struct EventFormView: View {
             .padding()
             .background(Color(NSColor.windowBackgroundColor))
         }
-        .frame(width: 400, height: 550)
+        .frame(width: 380, height: 520)
         .onAppear {
             loadCalendars()
         }
@@ -248,8 +256,12 @@ struct EventFormView: View {
                 await MainActor.run {
                     isSaving = false
                     if settings.closeFormAfterSave {
-                        appState.clearCurrentEvent()
-                        dismiss()
+                        if let onSave = onSave {
+                            onSave()
+                        } else {
+                            appState.clearCurrentEvent()
+                            dismiss()
+                        }
                     }
                 }
             } catch {

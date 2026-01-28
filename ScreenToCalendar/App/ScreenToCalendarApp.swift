@@ -25,16 +25,5 @@ struct ScreenToCalendarApp: App {
         }
         .windowResizability(.contentSize)
         .defaultPosition(.center)
-
-        // Event Form Window
-        Window("New Event", id: "event-form") {
-            if let event = appState.currentParsedEvent {
-                EventFormView(event: event)
-                    .environmentObject(appState)
-                    .environmentObject(settings)
-            }
-        }
-        .windowResizability(.contentSize)
-        .defaultPosition(.center)
     }
 }
