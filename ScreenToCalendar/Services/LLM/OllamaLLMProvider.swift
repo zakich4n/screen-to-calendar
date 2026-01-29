@@ -10,7 +10,10 @@ final class OllamaLLMProvider: LLMProvider {
             throw AppError.llmFailed("Invalid Ollama host URL")
         }
 
-        let prompt = LLMPrompts.eventExtractionPrompt(text: text)
+        let prompt = LLMPrompts.eventExtractionPrompt(
+            text: text,
+            customContext: settings.customPromptContext
+        )
 
         // Get model, auto-selecting first available if current is empty or invalid
         var model = settings.ollamaModel

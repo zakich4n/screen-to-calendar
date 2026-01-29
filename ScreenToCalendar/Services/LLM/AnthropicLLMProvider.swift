@@ -13,7 +13,10 @@ final class AnthropicLLMProvider: LLMProvider {
             throw AppError.llmFailed("Invalid URL")
         }
 
-        let prompt = LLMPrompts.eventExtractionPrompt(text: text)
+        let prompt = LLMPrompts.eventExtractionPrompt(
+            text: text,
+            customContext: settings.customPromptContext
+        )
 
         let requestBody: [String: Any] = [
             "model": settings.anthropicModel,

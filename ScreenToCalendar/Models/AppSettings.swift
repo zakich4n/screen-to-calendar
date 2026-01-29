@@ -58,6 +58,10 @@ final class AppSettings: ObservableObject {
         didSet { UserDefaults.standard.set(closeFormAfterSave, forKey: Keys.closeFormAfterSave) }
     }
 
+    @Published var customPromptContext: String {
+        didSet { UserDefaults.standard.set(customPromptContext, forKey: Keys.customPromptContext) }
+    }
+
     private init() {
         // Load saved settings or use defaults
         self.selectedLLMProvider = LLMProviderType(rawValue: UserDefaults.standard.string(forKey: Keys.selectedLLMProvider) ?? "") ?? .ollama
@@ -74,6 +78,7 @@ final class AppSettings: ObservableObject {
 
         self.showNotificationOnEventCreated = UserDefaults.standard.object(forKey: Keys.showNotification) as? Bool ?? true
         self.closeFormAfterSave = UserDefaults.standard.object(forKey: Keys.closeFormAfterSave) as? Bool ?? true
+        self.customPromptContext = UserDefaults.standard.string(forKey: Keys.customPromptContext) ?? ""
     }
 
     private enum Keys {
@@ -88,6 +93,7 @@ final class AppSettings: ObservableObject {
         static let defaultEventDuration = "defaultEventDuration"
         static let showNotification = "showNotificationOnEventCreated"
         static let closeFormAfterSave = "closeFormAfterSave"
+        static let customPromptContext = "customPromptContext"
     }
 }
 

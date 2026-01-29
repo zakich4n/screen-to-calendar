@@ -25,7 +25,7 @@ struct SettingsView: View {
                     Label("General", systemImage: "gear")
                 }
         }
-        .frame(width: 500, height: 350)
+        .frame(width: 500, height: 450)
     }
 }
 
@@ -342,6 +342,18 @@ struct GeneralSettingsView: View {
             Section("Behavior") {
                 Toggle("Show notification when event created", isOn: $settings.showNotificationOnEventCreated)
                 Toggle("Close form after saving", isOn: $settings.closeFormAfterSave)
+            }
+
+            Section("Personal Context") {
+                TextEditor(text: $settings.customPromptContext)
+                    .frame(height: 80)
+                    .font(.body)
+                    .scrollContentBackground(.hidden)
+                    .background(Color(nsColor: .textBackgroundColor))
+                    .cornerRadius(4)
+                Text("Add personal facts to help the AI understand your context.\nExamples: \"I live in Montpellier, France\" or \"'Comédie' refers to the Place de la Comédie subway stop\"")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
         }
         .formStyle(.grouped)

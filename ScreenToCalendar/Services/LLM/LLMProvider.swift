@@ -10,7 +10,7 @@ protocol LLMProvider {
 
 /// Common prompt template for event extraction
 enum LLMPrompts {
-    static func eventExtractionPrompt(text: String, currentDate: Date = Date()) -> String {
+    static func eventExtractionPrompt(text: String, currentDate: Date = Date(), customContext: String? = nil) -> String {
         let formatter = DateFormatter()
         formatter.dateFormat = "yyyy-MM-dd"
         let today = formatter.string(from: currentDate)
@@ -18,8 +18,22 @@ enum LLMPrompts {
         formatter.dateFormat = "EEEE"
         let dayOfWeek = formatter.string(from: currentDate)
 
-        return """
+        var prompt = """
         Today is \(dayOfWeek), \(today).
+        """
+
+        // Add custom context if provided
+        if let context = customContext, !context.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            prompt += """
+
+
+            Additional context about the user:
+            \(context)
+            """
+        }
+
+        prompt += """
+
 
         Extract calendar event information from the following text. Return a JSON object with these fields:
         - title: string (required) - the event title/name
@@ -38,6 +52,8 @@ enum LLMPrompts {
         Text to parse:
         \(text)
         """
+
+        return prompt
     }
 
     /// Parse JSON response into ParsedEvent
