@@ -1,5 +1,6 @@
 import SwiftUI
 import EventKit
+import AppKit
 
 struct EventFormView: View {
     @EnvironmentObject var appState: AppState
@@ -189,6 +190,16 @@ struct EventFormView: View {
 
                 Spacer()
 
+                Button {
+                    saveAndOpenInCalendar()
+                } label: {
+                    HStack(spacing: 4) {
+                        Image(systemName: "calendar")
+                        Text("Open in Calendar")
+                    }
+                }
+                .disabled(title.isEmpty || isSaving)
+
                 Button("Save Event") {
                     saveEvent()
                 }
@@ -270,6 +281,53 @@ struct EventFormView: View {
                     saveError = error.localizedDescription
                 }
             }
+        }
+    }
+
+    private func saveAndOpenInCalendar() {
+        isSaving = true
+        saveError = nil
+
+        let event = ParsedEvent(
+            id: originalEvent.id,
+            title: title,
+            startDate: startDate,
+            endDate: isAllDay ? nil : endDate,
+            isAllDay: isAllDay,
+            location: location.isEmpty ? nil : location,
+            notes: notes.isEmpty ? nil : notes,
+            calendarIdentifier: selectedCalendarIdentifier,
+            sourceText: originalEvent.sourceText
+        )
+
+        Task {
+            do {
+                _ = try await appState.saveEvent(event)
+                await MainActor.run {
+                    isSaving = false
+                    // Open Calendar app (event is already saved)
+                    openCalendarApp()
+                    // Close form
+                    if let onSave = onSave {
+                        onSave()
+                    } else {
+                        appState.clearCurrentEvent()
+                        dismiss()
+                    }
+                }
+            } catch {
+                await MainActor.run {
+                    isSaving = false
+                    saveError = error.localizedDescription
+                }
+            }
+        }
+    }
+
+    private func openCalendarApp() {
+        // Simply open Calendar.app - the event is already saved
+        if let calendarURL = NSWorkspace.shared.urlForApplication(withBundleIdentifier: "com.apple.iCal") {
+            NSWorkspace.shared.open(calendarURL)
         }
     }
 }

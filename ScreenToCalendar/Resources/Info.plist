@@ -30,5 +30,7 @@
     <string>Screen to Calendar needs calendar access to create events from captured text.</string>
     <key>NSCalendarsUsageDescription</key>
     <string>Screen to Calendar needs calendar access to create events from captured text.</string>
+    <key>NSAppleEventsUsageDescription</key>
+    <string>Screen to Calendar needs to control Calendar to show your saved events.</string>
 </dict>
 </plist>

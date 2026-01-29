@@ -110,8 +110,10 @@ final class AppState: ObservableObject {
     }
 
     /// Save event to calendar
-    func saveEvent(_ event: ParsedEvent) async throws {
-        try await calendarService.createEvent(event)
+    /// - Returns: The event identifier of the created event
+    @discardableResult
+    func saveEvent(_ event: ParsedEvent) async throws -> String {
+        return try await calendarService.createEvent(event)
     }
 
     /// Clear current state

@@ -28,7 +28,9 @@ final class CalendarService {
 
     /// Create a calendar event
     /// - Parameter parsedEvent: The event data to create
-    func createEvent(_ parsedEvent: ParsedEvent) async throws {
+    /// - Returns: The event identifier of the created event
+    @discardableResult
+    func createEvent(_ parsedEvent: ParsedEvent) async throws -> String {
         // Request access if needed
         let hasAccess = try await requestAccess()
         guard hasAccess else {
@@ -83,6 +85,8 @@ final class CalendarService {
         if AppSettings.shared.showNotificationOnEventCreated {
             await showNotification(for: parsedEvent)
         }
+
+        return event.eventIdentifier
     }
 
     /// Show a notification for the created event
