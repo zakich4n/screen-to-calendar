@@ -128,20 +128,25 @@ struct ProvidersSettingsView: View {
     private var ollamaVisionModelPicker: some View {
         if isLoadingModels {
             HStack {
-                Text("Vision Model")
+                Text("OCR Model")
                 Spacer()
                 ProgressView()
                     .scaleEffect(0.7)
             }
         } else if showManualModelEntry || availableOllamaModels.isEmpty {
             HStack {
-                TextField("Vision Model", text: $settings.ollamaVisionModel)
-                    .help("e.g., llava, bakllava")
+                TextField("OCR Model", text: $settings.ollamaVisionModel)
+                    .help("e.g., deepseek-ocr, llava, bakllava")
                 refreshButton
+            }
+            if let error = modelLoadError {
+                Text(error)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
             }
         } else {
             HStack {
-                Picker("Vision Model", selection: $settings.ollamaVisionModel) {
+                Picker("OCR Model", selection: $settings.ollamaVisionModel) {
                     ForEach(availableOllamaModels, id: \.self) { model in
                         Text(model).tag(model)
                     }
@@ -187,6 +192,9 @@ struct ProvidersSettingsView: View {
                     // Select first model if none selected
                     if settings.ollamaModel.isEmpty, let first = models.first {
                         settings.ollamaModel = first
+                    }
+                    if settings.ollamaVisionModel.isEmpty, let first = models.first {
+                        settings.ollamaVisionModel = first
                     }
                 }
             } catch {

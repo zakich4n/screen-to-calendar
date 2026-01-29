@@ -131,7 +131,7 @@ enum OCRProviderType: String, CaseIterable, Identifiable {
     var displayName: String {
         switch self {
         case .appleVision: return "Apple Vision (Free, Local)"
-        case .ollama: return "Ollama + LLaVA"
+        case .ollama: return "Ollama Vision Model"
         }
     }
 }

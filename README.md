@@ -5,7 +5,7 @@ A macOS menu bar app that extracts event details from text and creates calendar 
 > **Work in Progress**
 > This project is under active development. Currently:
 > - **Clipboard to Event**: Working and tested
-> - **Screenshot to Event**: Not fully tested yet, may be unstable
+> - **Screenshot to Event**: Working with Ollama vision models (e.g., deepseek-ocr)
 
 ## Features
 

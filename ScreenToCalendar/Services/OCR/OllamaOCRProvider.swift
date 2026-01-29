@@ -24,9 +24,10 @@ final class OllamaOCRProvider: OCRProvider {
             throw AppError.ocrFailed("Invalid Ollama host URL")
         }
 
+        // Use the recommended prompt for deepseek-ocr (model is sensitive to prompts)
         let requestBody: [String: Any] = [
             "model": settings.ollamaVisionModel,
-            "prompt": "Extract and return only the text visible in this image. Return the raw text without any commentary or formatting.",
+            "prompt": "Extract the text in the image.",
             "images": [base64Image],
             "stream": false
         ]
