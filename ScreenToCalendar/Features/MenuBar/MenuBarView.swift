@@ -13,6 +13,7 @@ struct MenuBarView: View {
     @Environment(\.openSettings) private var openSettings
 
     @State private var viewState: MenuBarViewState = .menu
+    @State private var showOnboarding = false
 
     var body: some View {
         Group {
@@ -32,6 +33,15 @@ struct MenuBarView: View {
             if event == nil {
                 viewState = .menu
             }
+        }
+        .onAppear {
+            if !settings.hasShownFirstRunPrompt {
+                showOnboarding = true
+            }
+        }
+        .sheet(isPresented: $showOnboarding) {
+            OnboardingView()
+                .environmentObject(settings)
         }
     }
 

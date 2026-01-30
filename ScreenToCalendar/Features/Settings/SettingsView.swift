@@ -338,6 +338,10 @@ struct GeneralSettingsView: View {
 
     var body: some View {
         Form {
+            Section("Startup") {
+                Toggle("Launch at login", isOn: $settings.launchAtStartup)
+            }
+
             Section("Event Defaults") {
                 Picker("Default Duration", selection: $settings.defaultEventDuration) {
                     Text("30 minutes").tag(30)

@@ -1,6 +1,7 @@
 import Combine
 import Foundation
 import KeyboardShortcuts
+import ServiceManagement
 
 /// User preferences and configuration
 final class AppSettings: ObservableObject {
@@ -62,6 +63,19 @@ final class AppSettings: ObservableObject {
         didSet { UserDefaults.standard.set(customPromptContext, forKey: Keys.customPromptContext) }
     }
 
+    // MARK: - Startup Settings
+
+    @Published var launchAtStartup: Bool {
+        didSet {
+            UserDefaults.standard.set(launchAtStartup, forKey: Keys.launchAtStartup)
+            updateLaunchAtStartup()
+        }
+    }
+
+    @Published var hasShownFirstRunPrompt: Bool {
+        didSet { UserDefaults.standard.set(hasShownFirstRunPrompt, forKey: Keys.hasShownFirstRunPrompt) }
+    }
+
     private init() {
         // Load saved settings or use defaults
         self.selectedLLMProvider = LLMProviderType(rawValue: UserDefaults.standard.string(forKey: Keys.selectedLLMProvider) ?? "") ?? .ollama
@@ -79,6 +93,21 @@ final class AppSettings: ObservableObject {
         self.showNotificationOnEventCreated = UserDefaults.standard.object(forKey: Keys.showNotification) as? Bool ?? true
         self.closeFormAfterSave = UserDefaults.standard.object(forKey: Keys.closeFormAfterSave) as? Bool ?? true
         self.customPromptContext = UserDefaults.standard.string(forKey: Keys.customPromptContext) ?? ""
+
+        self.launchAtStartup = UserDefaults.standard.bool(forKey: Keys.launchAtStartup)
+        self.hasShownFirstRunPrompt = UserDefaults.standard.bool(forKey: Keys.hasShownFirstRunPrompt)
+    }
+
+    private func updateLaunchAtStartup() {
+        do {
+            if launchAtStartup {
+                try SMAppService.mainApp.register()
+            } else {
+                try SMAppService.mainApp.unregister()
+            }
+        } catch {
+            print("Failed to update launch at startup: \(error)")
+        }
     }
 
     private enum Keys {
@@ -94,6 +123,8 @@ final class AppSettings: ObservableObject {
         static let showNotification = "showNotificationOnEventCreated"
         static let closeFormAfterSave = "closeFormAfterSave"
         static let customPromptContext = "customPromptContext"
+        static let launchAtStartup = "launchAtStartup"
+        static let hasShownFirstRunPrompt = "hasShownFirstRunPrompt"
     }
 }
 

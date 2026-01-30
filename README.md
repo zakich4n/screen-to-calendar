@@ -2,6 +2,8 @@
 
 A macOS menu bar app that extracts event details from text and creates calendar events using local LLMs.
 
+![Menu Bar](docs/menu-bar.png)
+
 > **Work in Progress**
 > This project is under active development. Currently:
 > - **Clipboard to Event**: Working and tested
